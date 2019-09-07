@@ -1,9 +1,11 @@
-interface Connector {
+import { connect } from 'net'
+
+export interface GGConnector {
     from: string
     to: string
 }
 
-interface Node {
+export interface GGNode {
     id: string
 }
 
@@ -11,8 +13,8 @@ interface Node {
  * Parses a string in the format 'A => B => C B => D'
  * and returns an array of Connectors
  */
-export function parseConnectors(def: string): Connector[] {
-    const result = new Array<Connector>()
+export function parseConnectors(def: string): GGConnector[] {
+    const result = new Array<GGConnector>()
     const defs = def.split(/(?<!\>)\s+(?!=)/)
     defs.forEach(part => {
         const chain = part.split(/\s*=>\s*/)
@@ -23,4 +25,18 @@ export function parseConnectors(def: string): Connector[] {
         })
     })
     return result
+}
+
+export function nodesFromConnectors(connectors: GGConnector[]) {
+    const nodes = new Set<string>()
+    connectors.forEach(c => {
+        nodes.add(c.from)
+        nodes.add(c.to)
+    })
+
+    return [...nodes.keys()].map(node => ({ id: node }))
+}
+
+export function gridGraphPlacement(nodes: GGNode[], connectors: GGConnector[]) {
+    return [[{ id: 'A' }, { id: 'B' }, { id: 'C' }]]
 }
