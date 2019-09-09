@@ -71,6 +71,20 @@ test('throw on no startNodes', t => {
     t.throws(() => buildGraph(nodes, connectors))
 })
 
+test('throw on missing nodes', t => {
+    const connectors = parseConnectors('A => B => C')
+    const nodes = nodesFromConnectors(connectors)
+    nodes.pop()
+    t.throws(() => buildGraph(nodes, connectors))
+})
+
+test('throw on missing nodes start-nodes', t => {
+    const connectors = parseConnectors('A => B C => D => E')
+    const nodes = nodesFromConnectors(connectors)
+    nodes.shift()
+    t.throws(() => buildGraph(nodes, connectors))
+})
+
 test('Place unconnected nodes', t => {
     const connectors = parseConnectors('A => B')
     const nodes = nodesFromConnectors(connectors)
