@@ -1,9 +1,5 @@
 import { GGNode, GGConnector, Matrix } from './src/types'
 
-export function gridGraphPlacement(nodes: GGNode[], connectors: GGConnector[]) {
-    return [[{ id: 'A' }, { id: 'B' }, { id: 'C' }]]
-}
-
 export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
     const matrix: Matrix = []
     // All direct upstream nodes from one node

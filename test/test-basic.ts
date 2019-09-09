@@ -64,3 +64,16 @@ test('A => B => C B => D E => F => C F => D', t => {
     const matrix = buildGraph(nodes, connectors)
     t.equal(matrixStrings(matrix), 'ABC\n__D\nEF_')
 })
+
+test('throw on no startNodes', t => {
+    const connectors = parseConnectors('A => B => C => A')
+    const nodes = nodesFromConnectors(connectors)
+    t.throws(() => buildGraph(nodes, connectors))
+})
+
+test('Place unconnected nodes', t => {
+    const connectors = parseConnectors('A => B')
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, [])
+    t.equal(matrixStrings(matrix), 'A\nB')
+})
