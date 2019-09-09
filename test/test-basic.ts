@@ -57,3 +57,10 @@ test('A => B => C B => D B => E E => B E => F', t => {
     const matrix = buildGraph(nodes, connectors)
     t.equal(matrixStrings(matrix), 'ABC\n__D\n_EF')
 })
+
+test('A => B => C B => D E => F => C F => D', t => {
+    const connectors = parseConnectors('A => B => C B => D E => F => C F => D')
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'ABC\n__D\nEF_')
+})

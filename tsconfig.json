@@ -5,10 +5,8 @@
         "strict": true,
         "moduleResolution": "node",
         "inlineSourceMap": true,
+        "declaration": true,
         "baseUrl": ".",
-        "paths": {
-            "*": ["declarations/*"]
-        },
         "outDir": "./build"
     },
     "exclude": ["node_modules"]
