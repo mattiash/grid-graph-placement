@@ -30,7 +30,7 @@ export function nodesFromConnectors(connectors: GGConnector[]): GGNode[] {
 }
 
 function columns(matrix: Matrix) {
-    return matrix.reduce((acc, row) => Math.max((row || []).length, acc), 0)
+    return matrix.reduce((acc, row) => Math.max(row.length, acc), 0)
 }
 
 export function matrixStrings(matrix: Matrix): string {
