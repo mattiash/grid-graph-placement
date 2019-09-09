@@ -1,5 +1,5 @@
 import * as test from 'purple-tape'
-import { gridGraphPlacement, setCell, findFreeCell, buildGraph } from '../index'
+import { setCell, findFreeCell, buildGraph } from '../index'
 import {
     parseConnectors,
     nodesFromConnectors,
