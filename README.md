@@ -1,6 +1,6 @@
 # grid-graph-placement
 
-[![Build Status](https://travis-ci.org/mattiash/grid-graph.svg?branch=master)](https://travis-ci.org/mattiash/grid-graph) [![Coverage Status](https://coveralls.io/repos/github/mattiash/grid-graph/badge.svg?branch=master)](https://coveralls.io/github/mattiash/grid-graph?branch=master)
+[![Build Status](https://travis-ci.org/mattiash/grid-graph-placement.svg?branch=master)](https://travis-ci.org/mattiash/grid-graph-placement) [![Coverage Status](https://coveralls.io/repos/github/mattiash/grid-graph-placement/badge.svg?branch=master)](https://coveralls.io/github/mattiash/grid-graph-placement?branch=master)
 
 Placement algorithm for @mattiash/grid-graph.
 Designed for (mostly) loop-free networks.
