@@ -58,6 +58,13 @@ test('A => B => C B => D B => E E => B E => F', t => {
     t.equal(matrixStrings(matrix), 'ABC\n__D\n_EF')
 })
 
+test('two bidirectionally connected pairs', t => {
+    const connectors = parseConnectors('A => B B => A C => D D => C')
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'A\nB\nC\nD')
+})
+
 test('A => B => C B => D E => F => C F => D', t => {
     const connectors = parseConnectors('A => B => C B => D E => F => C F => D')
     const nodes = nodesFromConnectors(connectors)
@@ -65,21 +72,29 @@ test('A => B => C B => D E => F => C F => D', t => {
     t.equal(matrixStrings(matrix), 'ABC\n__D\nEF_')
 })
 
-test('throw on no startNodes', t => {
+test('Place loop', t => {
     const connectors = parseConnectors('A => B => C => A')
     const nodes = nodesFromConnectors(connectors)
-    t.throws(() => buildGraph(nodes, connectors))
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'ABC')
 })
 
-test('throw on missing nodes', t => {
+test('throw on missing downstream node', t => {
     const connectors = parseConnectors('A => B => C')
     const nodes = nodesFromConnectors(connectors)
     nodes.pop()
     t.throws(() => buildGraph(nodes, connectors))
 })
 
-test('throw on missing nodes start-nodes', t => {
+test('throw on missing upstream node', t => {
     const connectors = parseConnectors('A => B C => D => E')
+    const nodes = nodesFromConnectors(connectors)
+    nodes.shift()
+    t.throws(() => buildGraph(nodes, connectors))
+})
+
+test('throw on missing start-nodes', t => {
+    const connectors = parseConnectors('A => B')
     const nodes = nodesFromConnectors(connectors)
     nodes.shift()
     t.throws(() => buildGraph(nodes, connectors))
@@ -90,4 +105,11 @@ test('Place unconnected nodes', t => {
     const nodes = nodesFromConnectors(connectors)
     const matrix = buildGraph(nodes, [])
     t.equal(matrixStrings(matrix), 'A\nB')
+})
+
+test('Two bidirectional pairs downstream', t => {
+    const connectors = parseConnectors('A => B => C => B B => D => B')
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'AB\n_C\n_D')
 })

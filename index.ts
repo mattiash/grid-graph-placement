@@ -22,24 +22,24 @@ export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
             let freeRow = findFreeCell(matrix, row, column)
             setCell(matrix, freeRow, column, node)
             placed.add(node.id)
-            const downstreamNodes = (downstream.get(node.id) || [])
-                .filter(ds => !(downstream.get(ds) || []).includes(node.id))
+            const downstreamNodes = downstream
+                .get(node.id)!
+                .filter(ds => !downstream.get(ds)!.includes(node.id))
                 .sort((a, b) => a.localeCompare(b))
+
             for (let ds of downstreamNodes) {
-                const n = nodeMap.get(ds)
-                if (n) {
-                    placeNodeAndDownstreams(n, freeRow, column + 1)
-                }
+                const n = nodeMap.get(ds)!
+                placeNodeAndDownstreams(n, freeRow, column + 1)
             }
-            const bidirDownstreamNodes = (downstream.get(node.id) || [])
-                .filter(ds => (downstream.get(ds) || []).includes(node.id))
+
+            const bidirDownstreamNodes = downstream
+                .get(node.id)!
+                .filter(ds => downstream.get(ds)!.includes(node.id))
                 .sort((a, b) => a.localeCompare(b))
 
             for (let ds of bidirDownstreamNodes) {
-                const n = nodeMap.get(ds)
-                if (n) {
-                    placeNodeAndDownstreams(n, freeRow, column)
-                }
+                const n = nodeMap.get(ds)!
+                placeNodeAndDownstreams(n, freeRow, column)
             }
         }
     }
@@ -65,24 +65,25 @@ export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
 
     // Find nodes without any upstream node
     const startNodeIds = [...upstream.keys()].filter(
-        node => (upstream.get(node) || []).length === 0,
+        node => upstream.get(node)!.length === 0,
     )
-
-    if (startNodeIds.length === 0) {
-        throw new Error('No start-nodes found')
-    }
 
     startNodeIds
         .sort((a, b) => a.localeCompare(b))
         .forEach(nodeId => {
             // Place node in column 1
             // Place downstream nodes
-            const node = nodeMap.get(nodeId)
-            if (!node) {
-                throw new Error('Internal error')
-            }
+            const node = nodeMap.get(nodeId)!
             placeNodeAndDownstreams(node, 0, 0)
         })
+
+    while (true) {
+        const unplaced = nodes.filter(node => !placed.has(node.id))
+        if (unplaced.length === 0) {
+            break
+        }
+        placeNodeAndDownstreams(unplaced[0], 0, 0)
+    }
 
     return matrix
 }
