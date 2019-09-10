@@ -1,6 +1,6 @@
 {
     "name": "@mattiash/grid-graph-placement",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "Placement algorithm for @mattiash/grid-graph",
     "main": "build/index.js",
     "scripts": {
