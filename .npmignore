@@ -1,5 +1,6 @@
 src/
 test/
+build/test/
 publish
 .*
 ts*.json
