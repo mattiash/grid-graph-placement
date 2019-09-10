@@ -1,0 +1,6 @@
+src/
+test/
+publish
+.*
+ts*.json
+index.ts
