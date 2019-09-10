@@ -69,7 +69,7 @@ test('A => B => C B => D E => F => C F => D', t => {
     const connectors = parseConnectors('A => B => C B => D E => F => C F => D')
     const nodes = nodesFromConnectors(connectors)
     const matrix = buildGraph(nodes, connectors)
-    t.equal(matrixStrings(matrix), 'ABC\n__D\nEF_')
+    t.equal(matrixStrings(matrix), 'ABC\nEFD')
 })
 
 test('Place loop', t => {
@@ -112,4 +112,20 @@ test('Two bidirectional pairs downstream', t => {
     const nodes = nodesFromConnectors(connectors)
     const matrix = buildGraph(nodes, connectors)
     t.equal(matrixStrings(matrix), 'AB\n_C\n_D')
+})
+
+test('A => B A => D C => B C => D', t => {
+    const connectors = parseConnectors('A => B A => D C => B C => D')
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'AB\nCD')
+})
+
+test('bidirectional pairs with several downstreams', t => {
+    const connectors = parseConnectors(
+        'A => B => C => B D => C B => a B => b B => c B=> d C => a C => b C => c C=> d',
+    )
+    const nodes = nodesFromConnectors(connectors)
+    const matrix = buildGraph(nodes, connectors)
+    t.equal(matrixStrings(matrix), 'ABa\n__b\n__c\nDCd')
 })

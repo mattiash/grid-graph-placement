@@ -13,6 +13,25 @@ export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
 
     const nodeMap = new Map<string, GGNode>()
 
+    function checkAboveAvailable(row: number, column: number, nodeId: string) {
+        if (row > 0) {
+            const nodeAbove = getCell(matrix, row - 1, column)
+            if (!nodeAbove) {
+                const nodeAboveRight = getCell(matrix, row - 1, column + 1)
+                if (nodeAboveRight) {
+                    const downstreams = downstream.get(nodeId)
+                    if (
+                        downstreams &&
+                        downstreams.includes(nodeAboveRight.id)
+                    ) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+
     function placeNodeAndDownstreams(
         node: GGNode,
         row: number,
@@ -20,7 +39,6 @@ export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
     ) {
         if (!placed.has(node.id)) {
             let freeRow = findFreeCell(matrix, row, column)
-            setCell(matrix, freeRow, column, node)
             placed.add(node.id)
             const downstreamNodes = downstream
                 .get(node.id)!
@@ -31,6 +49,11 @@ export function buildGraph(nodes: GGNode[], connectors: GGConnector[]) {
                 const n = nodeMap.get(ds)!
                 placeNodeAndDownstreams(n, freeRow, column + 1)
             }
+
+            if (checkAboveAvailable(freeRow, column, node.id)) {
+                freeRow = freeRow - 1
+            }
+            setCell(matrix, freeRow, column, node)
 
             const bidirDownstreamNodes = downstream
                 .get(node.id)!
@@ -97,6 +120,15 @@ export function setCell(
     const rowA = matrix[row] || []
     rowA[column] = content
     matrix[row] = rowA
+}
+
+export function getCell(
+    matrix: Matrix,
+    row: number,
+    column: number,
+): GGNode | undefined {
+    const rowA = matrix[row] || []
+    return rowA[column]
 }
 
 // Find first free cell in column that is on row x or higher,
